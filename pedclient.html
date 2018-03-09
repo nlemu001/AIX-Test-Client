@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client Example</title>
+  <link rel="stylesheet" href="include/jquery.mobile-1.4.5.min.css">
+  <script type="text/javascript" src="include/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="include/jquery.mobile-1.4.5.min.js"></script>
+  <script type="text/javascript" src="pedclient.js"></script>
+  </head>
+    <body>
+        <div data-role="page" id="page1" width="500px" height="500px">
+          <div data-role="header">
+            <h1>Web Client</h1>
+          </div>
+          <div role="main" class="ui-content">
+              <table style="width:550px">
+               <tr>
+                    <td width="150px"> <button id="pairButton" type="button" style="background:lightgrey; color:black" onclick="startPairing()">Pair</button></td>
+                    <td style="text-align:right" width="75px">QR Code:</td>
+                    <td width="325px"><input type="text" id="txtQrCode"></td>
+               </tr>
+               <tr>
+                    <td width="150px"> <button id="connectButton" type="button" style="background:lightgrey; color:black" onclick="connect()">Connect</button></td>
+                    <td style="text-align:right" width="75px">URI:</td>
+                    <td width="325px"><input type="text" id="txtUri"></td>
+                 </tr>
+             </table>
+             <table style="width:550px">
+              <tr>
+                   <td style="text-align:right" width="50px">Status:</td>
+                   <td width="325px"><div id="txtStatus">Disconnected</div></td>
+                </tr>
+            </table>
+            <div id="tabs" data-role="tabs">
+              <div data-role="navbar">
+                <ul>
+                  <li><a href="#fragment-1" class="ui-btn-active">SeatBack Control</a></li>
+                  <li><a href="#fragment-2">Video Player</a></li>
+                  <li><a href="#fragment-3">Automated Tests</a></li>
+                </ul>
+              </div>
+              <br>
+              <div id="fragment-1">
+                  <table style="width:150px">
+                   <tr>
+                     <td width="75px">Backlight:</td>
+                     <td width="75px"><img id="button-backlight" src="images/backlight_on.png" onclick="sendToggleBacklight()"></td>
+                    </tr>
+                   <table style="width:500px">
+                   <tr>
+                     <td width="75px">Volume:</td>
+                     <td width="425px"><input type="range" name="slider-volume" id="slider-volume" value="0" min="0" max="100" data-highlight="true" onchange="sendVolume();"></td>
+                   </tr>
+                   <tr>
+                     <td width="75px">Brightness:</td>
+                     <td width="425px"><input type="range" name="slider-brightness" id="slider-brightness" value="0" min="0" max="100" data-highlight="true" onchange="sendBrightness();"></td>
+                   </tr>
+                 </table>
+              </div>
+              <div id="fragment-2">
+              <table style="width:500px">
+              <tr>
+                <td width="75px">Media Id:</td>
+                <td colspan="2" width="325px"><input type="text" id="txtMediaId"></td>
+              </tr>
+              </table>
+              <table>
+               <tr>
+                 <td width="100px"><img id="button-play" src="images/play_small.png" onclick="sendPlayCommand()"></td>
+                 <td width="100px"><img id="button-stop" src="images/stop_small.png" onclick="sendStopCommand()"></td>
+                 <td width="100px"><img id="button-skipback" src="images/skip_back_small.png" onclick="sendSkipBackCommand()"></td>
+               </tr>
+               </table>
+               <table style="width:500px">
+               <tr>
+                 <td width="500px"><input type="range" name="slider-seek" id="slider-seek" value="0" min="0" max="100" data-highlight="true" onchange="sendSeek();"></td>
+               </tr>
+               <tr>
+                 <td width="500px"><div id="status"></div></td>
+               </tr>
+             </table>
+             <br>
+             <br>
+              </div>
+              <div id="fragment-3">
+              <table>
+               <tr>
+                 <td width="75px"><button id="volumeTestButton" type="button" style="background:lightgrey; color:black" onclick="volumeTest()">Volume</button></td>
+                 <td width="75px">Interval (milliseconds):</td>
+                 <td><input type="text" id="txtVolumeTestInterval"></td>
+               </tr>
+               <tr>
+                <td width="75px"><button id="brightnessTestButton" type="button" style="background:lightgrey; color:black" onclick="brightnessTest()">Brightness</button></td>
+                <td width="75px">Interval (milliseconds):</td>
+                <td><input type="text" id="txtBrightnessTestInterval"></td>
+               </tr>
+               <tr>
+                  <td width="75px"><button id="backlightTestButton" type="button" style="background:lightgrey; color:black" onclick="backlightTest()">Backlight</button></td>
+                  <td width="75px">Interval (milliseconds):</td>
+                  <td><input type="text" id="txtBacklightTestInterval"></td>
+               </tr>
+               </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>
+
+
+
+
