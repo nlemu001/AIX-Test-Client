@@ -14,6 +14,8 @@
         </p>
         <p>
             <textarea id="debugTextArea" style="width:400px;height:200px;" readonly></textarea>
+
+            <textarea id="debugTextArea2" style="width:400px;height:200px;" readonly></textarea>
         </p>
         <p>
             <input type="text" id="inputNick" value="nickname" />
@@ -23,9 +25,17 @@
 
         <script type="text/javascript">
             var debugTextArea = document.getElementById("debugTextArea");
-            function debug(message) {
-                debugTextArea.value += message + "\n";
-                debugTextArea.scrollTop = debugTextArea.scrollHeight;
+            var debugTextArea2 = document.getElementById("debugTextArea2");
+            function debug(message, id) {
+                if(id == "1"){
+                    debugTextArea.value += message + "\n";
+                    debugTextArea.scrollTop = debugTextArea.scrollHeight;
+                }
+                else if (id == "2")
+                {
+                    debugTextArea2.value += message + "\n";
+                    debugTextArea2.scrollTop = debugTextArea2.scrollHeight;
+                }
             }
 
             function sendMessage() {
@@ -34,6 +44,7 @@
                 var strToSend = nickname + ": " + msg;
 
                 var jsonObject = {};
+                jsonObject["chat_id"] = 1;
                 jsonObject["username"] = nickname;
                 jsonObject["message"] = msg;
                 if ( websocket != null )
@@ -81,11 +92,12 @@
                 console.log("Message received: " + s);
 
                 var eventObject = JSON.parse(s);
+                var chatId = eventObject["chat_id"];
                 var username = eventObject["username"];
                 var message = eventObject["message"];
 
-                debug(username);
-                debug("---- " + message);
+                debug(username, chatId);
+                debug("---- " + message, chatId);
 
                 // var elapsedTime = 0;
                 // switch (command) {
