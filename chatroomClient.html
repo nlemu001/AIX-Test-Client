@@ -13,46 +13,96 @@
             <button onClick="checkSocket();">State</button>
         </p>
         <p>
-            <textarea id="debugTextArea" style="width:400px;height:200px;" readonly></textarea>
+            <input id="chatWithSeat" type="text" value="Enter Seat"/>
+            <button onClick="sendChatRequest();">Request to Chat</button>
+        </p>
 
-            <textarea id="debugTextArea2" style="width:400px;height:200px;" readonly></textarea>
+        <p>
+            <h2>Chatroom 0</h2>
+            <textarea id="debugTextArea" style="width:400px;height:200px;" readonly></textarea>
         </p>
         <p>
-            <input type="text" id="inputNick" value="nickname" />
-            <input type="text" id="inputText" onkeydown="if(event.keyCode==13)sendMessage();"/>
-            <button id="sendButton" onClick="sendMessage();" disabled>Send</button>
+            <input type="text" id="inputNick" value="Pesto" />
+            <input type="text" id="inputText" onkeydown="if(event.keyCode==13)sendMessage(0);"/>
+            <button id="sendButton" onClick="sendMessage(0);" disabled>Send</button>
+        </p>
+
+        <p>
+            <h2>Chatroom 1</h2>
+            <textarea id="debugTextArea2" style="width:400px;height:200px;" readonly></textarea>         
+        </p>
+        <p>
+            <input type="text" id="inputNick2" value="Ben" />
+            <input type="text" id="inputText2" onkeydown="if(event.keyCode==13)sendMessage(1);"/>
+            <button id="sendButton2" onClick="sendMessage(1);" disabled>Send</button>
         </p>
 
         <script type="text/javascript">
             var debugTextArea = document.getElementById("debugTextArea");
             var debugTextArea2 = document.getElementById("debugTextArea2");
             function debug(message, id) {
-                if(id == "1"){
+                if(id == "0"){
                     debugTextArea.value += message + "\n";
                     debugTextArea.scrollTop = debugTextArea.scrollHeight;
                 }
-                else if (id == "2")
+                else if (id == "1")
                 {
                     debugTextArea2.value += message + "\n";
                     debugTextArea2.scrollTop = debugTextArea2.scrollHeight;
                 }
             }
 
-            function sendMessage() {
-                var nickname = document.getElementById("inputNick").value;
-                var msg = document.getElementById("inputText").value;
-                var strToSend = nickname + ": " + msg;
+            function sendChatRequest() {
+                var seatId = document.getElementById("chatWithSeat").value;
 
                 var jsonObject = {};
-                jsonObject["chat_id"] = 1;
-                jsonObject["username"] = nickname;
-                jsonObject["message"] = msg;
-                if ( websocket != null )
+                jsonObject["seat_id"] = seatId;
+
+                if ( websocket != null)
                 {
-                    document.getElementById("inputText").value = "";
+                    document.getElementById("chatWithSeat").value = "Enter Seat";
                     websocket.send( JSON.stringify(jsonObject) );
                     console.log( "string sent :", '"'+JSON.stringify(jsonObject)+'"' );
-                    // debug(JSON.stringify(jsonObject));
+                }
+            }
+
+            function sendMessage(chat_id) {
+
+                if (chat_id == "0")
+                {
+                    var nickname = document.getElementById("inputNick").value;
+                    var msg = document.getElementById("inputText").value;
+                    var strToSend = nickname + ": " + msg;
+
+                    var jsonObject = {};
+                    jsonObject["chat_id"] = chat_id;
+                    jsonObject["username"] = nickname;
+                    jsonObject["message"] = msg;
+                    if ( websocket != null )
+                    {
+                        document.getElementById("inputText").value = "";
+                        websocket.send( JSON.stringify(jsonObject) );
+                        console.log( "string sent :", '"'+JSON.stringify(jsonObject)+'"' );
+                        // debug(JSON.stringify(jsonObject));
+                    }
+                }
+                else if (chat_id == "1")
+                {
+                    var nickname = document.getElementById("inputNick2").value;
+                    var msg = document.getElementById("inputText2").value;
+                    var strToSend = nickname + ": " + msg;
+
+                    var jsonObject = {};
+                    jsonObject["chat_id"] = chat_id;
+                    jsonObject["username"] = nickname;
+                    jsonObject["message"] = msg;
+                    if ( websocket != null )
+                    {
+                        document.getElementById("inputText2").value = "";
+                        websocket.send( JSON.stringify(jsonObject) );
+                        console.log( "string sent :", '"'+JSON.stringify(jsonObject)+'"' );
+                        // debug(JSON.stringify(jsonObject));
+                    }
                 }
             }
 
@@ -70,11 +120,13 @@
                         debug("CONNECTED");
                         document.getElementById("disconnectButton").disabled = false;
                         document.getElementById("sendButton").disabled = false;
+                        document.getElementById("sendButton2").disabled = false;
                     };
                     websocket.onclose = function (evt) {
                         debug("DISCONNECTED");
                         document.getElementById("disconnectButton").disabled = true;
                         document.getElementById("sendButton").disabled = true;
+                        document.getElementById("sendButton2").disabled = true;
                     };
                     websocket.onmessage = function (evt) {
                         console.log( "Message received :", evt.data );
